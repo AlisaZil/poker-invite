@@ -1,0 +1,1272 @@
+/* ============================================================
+   POKER NIGHT — three-panel invitation
+   Every measurement is expressed in cqw (container-query width
+   units) so each panel scales pixel-identically at any size.
+   Reference artboard: 478 / 457 / 471 wide  ×  1043 tall.
+   ============================================================ */
+
+:root {
+  --red:        #d8232a;
+  --red-ink:    #d61f26;
+  --red-pale:   #f0d6d3;
+  --red-chip:   #ef3a33;   /* a lighter red, to read against the field */
+  --cream:      #f2ece1;
+  --cream-pure: #f7f2e8;
+  --black:      #17110f;
+  --ink:        #171717;
+  --page:       #f0eae0;
+  --grain:      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--page);
+  font-family: "Oswald", "Haettenschweiler", "Arial Narrow", system-ui, sans-serif;
+  color: var(--ink);
+}
+
+img { max-width: 100%; display: block; }
+
+/* ---------- layout — one continuous scrolling page ---------- */
+
+.spread {
+  width: 100%;
+}
+
+/* Each panel is a full-viewport section of the page. */
+.panel {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* The artboard: keeps the original poster proportions, and is the
+   container every cqw measurement below is resolved against. */
+.panel__stage {
+  container-type: inline-size;
+  position: relative;
+  height: 100svh;
+  max-height: 100svh;
+  width: min(100%, calc(100svh * 886 / 1772));
+  aspect-ratio: 886 / 1772;
+  flex: 0 0 auto;
+}
+.panel--cream .panel__stage { width: min(100%, calc(100svh * 457 / 1043)); aspect-ratio: 457 / 1043; }
+.panel--black .panel__stage { width: min(100%, calc(100svh * 471 / 1043)); aspect-ratio: 471 / 1043; }
+
+/* paper grain over every panel */
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  background-size: 140px 140px;
+  mix-blend-mode: multiply;
+  opacity: .13;
+  pointer-events: none;
+  z-index: 9;
+}
+
+.panel--red   { background: var(--red); }
+.panel--cream { background: var(--red); }
+.panel--black { background: var(--black); }
+.panel--black::after { mix-blend-mode: screen; opacity: .07; }
+
+/* ---------- full-bleed side-field confetti (wide screens) ---------- */
+
+.scatter {
+  position: absolute;
+  inset: 0;
+  z-index: 5;   /* above the cream ribbon, below the paper grain */
+  pointer-events: none;
+}
+.scatter > * {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--s);
+  height: var(--s);
+}
+.scatter__diamond { height: auto; width: var(--s); }
+
+/* Below this width the artboard already fills the screen —
+   the extra confetti would collide with it. */
+@media (max-width: 1100px) {
+  .scatter { display: none; }
+}
+
+/* ---------- poker chips (octagons) ---------- */
+
+.chip {
+  position: absolute;
+  display: block;
+  aspect-ratio: 1;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  z-index: 1;
+}
+.chip--black { background: var(--black); }
+.chip--cream { background: var(--cream); }
+.chip--red   { background: var(--red); }
+
+/* ============================================================
+   PANEL 1 — RED
+   ============================================================ */
+
+.eyebrow {
+  position: absolute;
+  top: 20.3cqw;
+  left: 0;
+  right: 10.8cqw;   /* nudged clear of the corner chips */
+  margin: 0;
+  z-index: 4;
+  color: var(--cream);
+  font-size: 3.4cqw;
+  text-align: center;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+/* --- playing cards --- */
+
+.cards {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  z-index: 3;
+}
+
+.card {
+  position: absolute;
+  background: var(--cream-pure);
+  border-radius: 2.3cqw;
+  box-shadow: 1.4cqw 1.8cqw 0 rgba(23, 17, 15, .09);
+  overflow: hidden;
+}
+
+/* The pair is spread far enough that each card keeps its centre
+   pip in view — overlap any tighter and the ace's spade ends up
+   half-hidden behind the king, which stops reading as a card. */
+.card--ace  { top: 34cqw; left: 15cqw; width: 42cqw; height: 60cqw; transform: rotate(-4deg); z-index: 1; }
+.card--king { top: 38cqw; left: 43cqw; width: 46cqw; height: 65cqw; transform: rotate( 6deg); z-index: 2; }
+
+.card__corner {
+  position: absolute;
+  top: 4cqw;
+  left: 3.6cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .6cqw;
+  z-index: 2;
+}
+.card__corner--flip {
+  top: auto; left: auto;
+  bottom: 4cqw;
+  right: 3.6cqw;
+  transform: rotate(180deg);
+}
+
+.card__rank {
+  font-size: 6.2cqw;
+  font-weight: 500;
+  line-height: .8;
+  color: var(--ink);
+}
+.card__rank--red { color: var(--red-ink); }
+
+.card__mini { width: 2.5cqw; }
+
+.card__pip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20cqw;
+  transform: translate(-50%, -50%);
+}
+/* centred on their own card, as a real one is */
+.card--ace  .card__pip { width: 13cqw; }
+.card--king .card__pip { width: 15cqw; }
+
+/* --- headline --- */
+
+.title {
+  position: absolute;
+  left: 11.9cqw;
+  bottom: 35cqw;
+  margin: 0;
+  z-index: 4;
+  font-size: 29.8cqw;
+  font-weight: 700;
+  line-height: .8;
+  letter-spacing: -.012em;
+  text-transform: uppercase;
+  transform: scaleX(1.05);
+  transform-origin: left bottom;
+}
+.title__line { display: block; }
+.title__line--dark  { color: var(--black); }
+.title__line--light { color: var(--cream); }
+
+.tagline {
+  position: absolute;
+  left: 11.9cqw;
+  bottom: 25.6cqw;
+  margin: 0;
+  z-index: 4;
+  color: var(--black);
+  font-size: 3.2cqw;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: .075em;
+  text-transform: uppercase;
+}
+.tagline i { font-style: normal; padding: 0 .35em; }
+
+.scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 13.8cqw;
+  z-index: 4;
+  width: 8.5cqw;
+  padding: 0;
+  transform: translateX(-50%);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  line-height: 0;
+  transition: transform .25s ease;
+}
+.scroll-cue:hover { transform: translateX(-50%) translateY(.7cqw); }
+.scroll-cue svg { width: 100%; }
+.scroll-cue path {
+  fill: none;
+  stroke: var(--cream);
+  stroke-width: 3.2;
+  stroke-linecap: square;
+}
+
+/* ============================================================
+   PANEL 2 — CREAM
+   ============================================================ */
+
+.panel__shape {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  height: 100%;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+.panel__shape path { fill: var(--cream); }
+
+.panel__inner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 42cqw 7cqw 0;
+}
+
+.deal-title {
+  margin: 0;
+  text-align: center;
+  color: var(--black);
+  font-size: 16.4cqw;
+  font-weight: 700;
+  line-height: .92;
+  letter-spacing: -.015em;
+  text-transform: uppercase;
+  transform: scaleX(.95);
+}
+.deal-title span { color: var(--red-ink); }
+
+.rule {
+  width: 67cqw;
+  margin: 6cqw auto 0;
+  border: 0;
+  border-top: .58cqw solid var(--black);
+}
+
+/* Breakpoint-specific decoration — see the blocks further down. */
+.p1-chip-g,
+.p1-chip-h,
+.p1-chip-i,
+.deco-spade,
+.p2-chip-f,
+.p2-chip-g,
+.p2-chip-h,
+.deco-diamond--alt-a,
+.deco-diamond--alt-b,
+.p3-chip-d,
+.p3-chip-e,
+.p3-chip-f { display: none; }
+
+.deal {
+  margin: 19cqw 0 0;
+  padding: 0 0 0 3.5cqw;
+  list-style: none;
+}
+
+.deal__row {
+  display: flex;
+  align-items: center;
+  gap: 5.6cqw;
+  margin-bottom: 10.4cqw;
+}
+.deal__row:nth-child(2) { margin-bottom: 15cqw; }
+.deal__row:nth-child(3) { margin-bottom: 14.2cqw; }
+.deal__row:last-child   { margin-bottom: 0; }
+
+.deal__suit { flex: 0 0 auto; width: 8.8cqw; }
+.deal__row:nth-child(2) .deal__suit { width: 9.8cqw; }
+.deal__row:nth-child(3) .deal__suit { width: 10cqw; }
+.deal__row:nth-child(4) .deal__suit { width: 10.4cqw; }
+
+.deal__text {
+  margin: 0;
+  color: var(--black);
+  font-size: 6.9cqw;
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: .004em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.deal__text em { font-style: normal; color: var(--red-ink); }
+.deal__text i  { font-style: normal; padding: 0 .18em; }
+
+/* ============================================================
+   PANEL 3 — BLACK
+   ============================================================ */
+
+.deco-diamond { position: absolute; z-index: 1; }
+.deco-diamond--top    { top: 5cqw;   right: 23cqw; width: 16cqw; }
+.deco-diamond--bottom { top: 179cqw; left: 21cqw;  width: 19cqw; }
+
+.rsvp-title {
+  position: absolute;
+  top: 52cqw;
+  left: 9.6cqw;
+  right: 6cqw;
+  margin: 0;
+  z-index: 4;
+  color: var(--cream);
+  font-size: 10.4cqw;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.005em;
+  text-transform: uppercase;
+  transform: scaleX(.96);
+  transform-origin: left center;
+}
+.rsvp-title span { color: var(--red); }
+
+/* --- the form card --- */
+
+.form {
+  position: absolute;
+  top: 66cqw;
+  left: 9.6cqw;
+  right: 10.8cqw;
+  z-index: 4;
+  padding: 10.6cqw 5.4cqw 6.4cqw;
+  background: var(--cream);
+  clip-path: polygon(
+    0 3.2cqw, 3.2cqw 0,
+    calc(100% - 3.2cqw) 0, 100% 3.2cqw,
+    100% calc(100% - 3.2cqw), calc(100% - 3.2cqw) 100%,
+    3.2cqw 100%, 0 calc(100% - 3.2cqw)
+  );
+}
+
+.field {
+  display: flex;
+  align-items: baseline;
+  gap: 2.2cqw;
+  margin-bottom: 7.2cqw;
+}
+
+.field__label {
+  flex: 0 0 auto;
+  color: var(--black);
+  font-size: 3.6cqw;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.field__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 .4cqw .8cqw;
+  background: transparent;
+  border: 0;
+  border-bottom: .38cqw solid var(--black);
+  color: var(--black);
+  font-family: inherit;
+  font-size: 3.6cqw;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  outline: none;
+}
+.field__input:focus-visible,
+.field__input[aria-invalid="true"] { border-bottom-color: var(--red); }
+.field__input::-webkit-outer-spin-button,
+.field__input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.field__input[type="number"] { -moz-appearance: textfield; }
+
+/* --- all in / fold --- */
+
+.choices {
+  display: flex;
+  gap: 3cqw;
+  margin: 6.4cqw 0 4.6cqw;
+}
+
+.choice {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.8cqw;
+  padding: 2.4cqw .8cqw;
+  background: transparent;
+  border: .38cqw solid var(--black);
+  border-radius: 1.1cqw;
+  color: var(--black);
+  font-family: inherit;
+  font-size: 3.4cqw;
+  font-weight: 600;
+  letter-spacing: .045em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .16s ease, color .16s ease;
+}
+.choice__icon { width: 6.4cqw; flex: 0 0 auto; }
+.choice__icon .s-c { fill: var(--cream); stroke: var(--black); stroke-width: 1.4; }
+.choice__icon .s-r { fill: var(--red);   stroke: var(--black); stroke-width: 1.4; }
+.choice__icon .f-r { fill: var(--red);   stroke: var(--black); stroke-width: 1.4; }
+.choice__icon .f-a { fill: none; stroke: var(--black); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* all in reads as a commitment; folding reads as stepping back */
+.choice[data-value="all-in"].is-active {
+  background: var(--red-pale);
+  border-color: var(--red);
+}
+.choice[data-value="fold"].is-active {
+  background: transparent;
+  opacity: .5;
+}
+
+/* --- submit --- */
+
+.submit {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  padding: 3.4cqw 1cqw;
+  background: var(--red);
+  border: .38cqw solid var(--black);
+  border-radius: 1.1cqw;
+  box-shadow: inset 0 0 0 .55cqw var(--cream);
+  color: var(--cream);
+  font-family: inherit;
+  font-size: 5.6cqw;
+  font-weight: 600;
+  letter-spacing: .045em;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: filter .16s ease, transform .08s ease;
+}
+.submit:hover  { filter: brightness(1.08); }
+.submit:active { transform: translateY(.3cqw); }
+
+/* The note replaces the deadline rather than sitting inside the
+   card — the card's clip-path would crop it, and a growing card
+   would shunt the layout around. */
+.form__note {
+  position: absolute;
+  top: 160cqw;
+  left: 4cqw;
+  right: 4cqw;
+  z-index: 5;
+  margin: 0;
+  color: var(--cream);
+  font-size: 3.4cqw;
+  font-weight: 500;
+  letter-spacing: .05em;
+  line-height: 1.35;
+  text-align: center;
+  text-transform: uppercase;
+}
+.form__note.is-error { color: #ff6a63; }
+
+.footnote { transition: opacity .25s ease; }
+.panel--black.is-messaging .footnote { opacity: 0; visibility: hidden; }
+
+.footnote {
+  position: absolute;
+  top: 160cqw;
+  left: 0;
+  right: 0;
+  margin: 0;
+  z-index: 4;
+  color: var(--cream);
+  font-size: 4.2cqw;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: .05em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   CHIP PLACEMENT  (top/left/width all in cqw of their panel)
+   ============================================================ */
+
+.p1-chip-a { top:  15.2cqw; left: 68.8cqw; width: 15.2cqw; }
+.p1-chip-b { top:  23.1cqw; left: 79.6cqw; width: 14.1cqw; z-index: 2; }
+.p1-chip-c { top:  92cqw;   left: 10.2cqw; width: 14.1cqw; }
+.p1-chip-d { top:  98.8cqw; left: 19.2cqw; width: 13.5cqw; z-index: 2; }
+.p1-chip-e { top: 178.3cqw; left: 10.2cqw; width: 14.1cqw; }
+.p1-chip-f { top: 182.8cqw; left: 17.5cqw; width: 14.7cqw; z-index: 2; }
+
+.p2-chip-a { top: 10.5cqw; left: 65cqw;   width: 12cqw; }
+.p2-chip-b { top: 16cqw;   left: 75cqw;   width: 13cqw; z-index: 2; }
+.p2-chip-c { top: 184cqw;  left: 61cqw;   width: 17.5cqw; }
+.p2-chip-d { top: 194cqw;  left: 75cqw;   width: 15cqw; z-index: 2; }
+.p2-chip-e { top: 203cqw;  left: 63cqw;   width: 12cqw;  z-index: 3; }
+
+.p3-chip-a { top: 15.5cqw; right: 11.6cqw; width: 10.6cqw; z-index: 2; }
+.p3-chip-b { top: 28cqw;   right: 16cqw;   width: 9.5cqw;  z-index: 3; }
+.p3-chip-c { top: 199cqw;  left: 35cqw;    width: 10.6cqw; z-index: 2; }
+
+/* ============================================================
+   RESPONSIVE — stack the panels on narrow screens
+   ============================================================ */
+
+/* Short / wide viewports: let the artboard be led by width instead,
+   so the poster never has to shrink below a readable size. */
+@media (max-aspect-ratio: 886/1772) {
+  .panel--red .panel__stage { width: 100%; height: auto; max-height: none; }
+}
+@media (max-aspect-ratio: 457/1043) {
+  .panel--cream .panel__stage { width: 100%; height: auto; max-height: none; }
+}
+@media (max-aspect-ratio: 471/1043) {
+  .panel--black .panel__stage { width: 100%; height: auto; max-height: none; }
+}
+
+/* ============================================================
+   PANEL 1 — LOAD CHOREOGRAPHY
+   The cards are dealt in, the headline rises word by word, and
+   the supporting type fades in behind it. These keyframes drive
+   the independent `translate` / `rotate` properties, which
+   compose with each element's own `transform`, so the tuned
+   resting positions above are left completely untouched.
+   ============================================================ */
+
+@keyframes deal-ace {
+  from { opacity: 0; translate: 68% -72%; rotate: -9deg; }
+  to   { opacity: 1; translate: 0 0;      rotate: 0deg; }
+}
+
+@keyframes deal-king {
+  from { opacity: 0; translate: 80% -62%; rotate: -18deg; }
+  to   { opacity: 1; translate: 0 0;      rotate: 0deg; }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; translate: 0 .34em; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; translate: 0 .5em; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes cue-bob {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 24%; }
+}
+
+/* the deal — king lands ~180ms later and a touch faster */
+.card--ace  { animation: deal-ace  .90s cubic-bezier(.2, .8, .22, 1)       both; }
+.card--king { animation: deal-king .74s cubic-bezier(.2, .8, .22, 1) .18s  both; }
+
+/* POKER, then NIGHT 150ms behind it */
+.title__line--dark  { animation: rise-in .7s cubic-bezier(.2, .8, .22, 1) .55s both; }
+.title__line--light { animation: rise-in .7s cubic-bezier(.2, .8, .22, 1) .70s both; }
+
+/* the supporting type comes in last */
+.eyebrow { animation: fade-up .6s ease-out 1.05s both; }
+.tagline { animation: fade-up .6s ease-out 1.20s both; }
+
+/* the arrow settles in, then breathes indefinitely */
+.scroll-cue {
+  animation: fade-up .6s ease-out 1.35s both,
+             cue-bob 2.6s ease-in-out 1.95s infinite;
+}
+
+/* ============================================================
+   PANEL 1 — TABLET (LANDSCAPE, 700–1099px)
+   A 4:3 artboard: the type block on the left with the eyebrow
+   centred over it, the two cards upright on the right, and a
+   black-and-red chip pair in each corner.
+   ============================================================ */
+
+@media (min-width: 700px) and (max-width: 1099px) and (orientation: landscape) {
+
+  .panel--red .panel__stage {
+    width: min(100%, calc(100svh * 4 / 3));
+    height: auto;
+    max-height: none;
+    aspect-ratio: 4 / 3;
+  }
+
+  .panel--red .scatter { display: none; }
+
+  /* the eyebrow is centred over the headline block, not the page */
+  .panel--red .eyebrow {
+    top: 20.6cqw;
+    left: 6.9cqw;
+    right: 54.7cqw;
+    font-size: 2.25cqw;
+    text-align: center;
+  }
+
+  .panel--red .title {
+    left: 7.2cqw;
+    bottom: 24.5cqw;
+    font-size: 15.5cqw;
+    line-height: .8;
+    transform: scaleX(.96);
+  }
+
+  .panel--red .tagline {
+    left: 7.2cqw;
+    bottom: 20.8cqw;
+    font-size: 1.63cqw;
+  }
+
+  .panel--red .scroll-cue {
+    left: 49.1cqw;
+    bottom: 3.6cqw;
+    width: 3.8cqw;
+  }
+  .panel--red .scroll-cue path { stroke-width: 2.8; }
+
+  /* --- the cards, near upright --- */
+
+  .panel--red .card {
+    border-radius: 1.5cqw;
+    box-shadow: .5cqw .7cqw 0 rgba(23, 17, 15, .10);
+  }
+
+  .panel--red .card--ace {
+    top: 14.4cqw;
+    left: 52.3cqw;
+    width: 21.2cqw;
+    height: 41.9cqw;
+    transform: rotate(-4deg);
+    z-index: 2;
+  }
+  .panel--red .card--king {
+    top: 17.3cqw;
+    left: 72.5cqw;
+    width: 22cqw;
+    height: 41.5cqw;
+    transform: rotate(3deg);
+    z-index: 1;
+  }
+
+  .panel--red .card__corner { top: 2.4cqw; left: 2.1cqw; gap: .3cqw; }
+  .panel--red .card__corner--flip { top: auto; left: auto; bottom: 2.4cqw; right: 2.1cqw; }
+  .panel--red .card__rank { font-size: 3.8cqw; }
+  .panel--red .card__mini { width: 1.2cqw; }
+
+  .panel--red .card--ace  .card__pip { width: 8.2cqw; top: 47.5%; left: 50%; }
+  .panel--red .card--king .card__pip { width: 7.6cqw; top: 48.5%; left: 50%; }
+
+  /* --- chips: a black/red pair in each corner --- */
+
+  .panel--red .chip--cream { background: var(--red-chip); }
+
+  .panel--red .p1-chip-a { top:  4.1cqw; left:  2.7cqw; width: 7.9cqw; }
+  .panel--red .p1-chip-b { top:  8.6cqw; left:  8.1cqw; width: 5.5cqw; }
+  .panel--red .p1-chip-e { top:  4.5cqw; left: 85.2cqw; width: 7.2cqw; }
+  .panel--red .p1-chip-f { top:  8.9cqw; left: 91cqw;   width: 4.8cqw; }
+  .panel--red .p1-chip-c { top: 61.8cqw; left:  4.5cqw; width: 7.6cqw; }
+  .panel--red .p1-chip-d { top: 65.9cqw; left: 10.2cqw; width: 5.1cqw; }
+
+  .panel--red .p1-chip-g,
+  .panel--red .p1-chip-h,
+  .panel--red .p1-chip-i { display: block; }
+
+  .panel--red .p1-chip-g { top: 62.2cqw; left: 85.5cqw; width: 7.6cqw; }
+  .panel--red .p1-chip-h { top: 65.9cqw; left: 91.3cqw; width: 4.8cqw; }
+  .panel--red .p1-chip-i { top: 46.4cqw; left: 46.4cqw; width: 3.8cqw; }
+}
+
+/* ============================================================
+   PANEL 1 — WIDE-SCREEN (LANDSCAPE) HERO
+   On a computer the opening panel re-composes as a 1656x944
+   artboard: type on the left, the two cards on the right.
+   Every value below is cqw of that landscape stage.
+   ============================================================ */
+
+@media (min-width: 1100px) {
+
+  .panel--red .panel__stage {
+    width: min(100%, calc(100svh * 1656 / 944));
+    height: auto;
+    max-height: none;
+    aspect-ratio: 1656 / 944;
+  }
+
+  /* the artboard now fills the screen — no side-field confetti */
+  .panel--red .scatter { display: none; }
+
+  .panel--red .eyebrow {
+    top: 7.9cqw;
+    left: 4.5cqw;
+    right: auto;
+    font-size: 1.7cqw;
+    letter-spacing: .17em;
+    text-align: left;
+  }
+
+  .panel--red .title {
+    left: 4.1cqw;
+    bottom: 15.9cqw;
+    font-size: 16cqw;
+    line-height: .85;
+    transform: scaleX(1.05);
+  }
+
+  .panel--red .tagline {
+    left: 4.6cqw;
+    bottom: 12.3cqw;
+    font-size: 1.81cqw;
+    letter-spacing: .08em;
+  }
+
+  .panel--red .scroll-cue {
+    left: 50.4cqw;
+    bottom: 3.3cqw;
+    width: 4.2cqw;
+  }
+  .panel--red .scroll-cue path { stroke-width: 2.6; }
+
+  /* --- the cards --- */
+
+  .panel--red .cards {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+  }
+
+  .panel--red .card {
+    border-radius: 1.5cqw;
+    box-shadow: .7cqw .9cqw 0 rgba(23, 17, 15, .10);
+  }
+
+  /* on wide screens the ace sits on top of the king */
+  .panel--red .card--ace {
+    top: 6cqw;
+    left: 50cqw;
+    width: 23cqw;
+    height: 39cqw;
+    transform: rotate(-7deg);
+    z-index: 2;
+  }
+  .panel--red .card--king {
+    top: 9cqw;
+    left: 70cqw;
+    width: 22cqw;
+    height: 39cqw;
+    transform: rotate(8deg);
+    z-index: 1;
+  }
+
+  .panel--red .card__corner { top: 2.6cqw; left: 2.4cqw; gap: .35cqw; }
+  .panel--red .card__corner--flip { top: auto; left: auto; bottom: 2.6cqw; right: 2.4cqw; }
+  .panel--red .card__rank { font-size: 4.2cqw; }
+  .panel--red .card__mini { width: 1.7cqw; }
+
+  .panel--red .card--ace  .card__pip { width: 11.6cqw; top: 49%; left: 49%; }
+  .panel--red .card--king .card__pip { width: 11cqw;   top: 49%; left: 47%; }
+
+  /* --- chips --- */
+
+  .panel--red .p1-chip-a { top:  1.5cqw; left: 83.6cqw; width:  8.15cqw; }
+  .panel--red .p1-chip-b { top:  3.9cqw; left: 90cqw;   width:  7.85cqw; }
+  .panel--red .p1-chip-c { top: 31.7cqw; left: 91.8cqw; width:  7.85cqw; }
+  .panel--red .p1-chip-d { top: 35.6cqw; left: 96.3cqw; width:  7.85cqw; }
+  .panel--red .p1-chip-e { top: 46.2cqw; left: -1.8cqw; width:  8.15cqw; }
+  .panel--red .p1-chip-f { top: 47.4cqw; left: 10cqw;   width: 11.2cqw; }
+}
+
+/* ============================================================
+   PANEL 2 — REVEAL, ONE LINE AT A TIME
+   Triggered by .is-revealed, which script.js adds when the
+   section scrolls into view. Fill mode is `backwards` (not
+   forwards) so that once a row has landed it returns to its
+   declarative style and the hover state below can take over.
+   ============================================================ */
+
+/* Held back until the section is reached. Scoped to html.js so
+   that without JavaScript everything simply renders as normal. */
+html.js .panel--cream:not(.is-revealed) .deco-spade,
+html.js .panel--cream:not(.is-revealed) .deal-title,
+html.js .panel--cream:not(.is-revealed) .rule,
+html.js .panel--cream:not(.is-revealed) .deal__suit,
+html.js .panel--cream:not(.is-revealed) .deal__text,
+html.js .panel--cream:not(.is-revealed) .deal__text em { opacity: 0; }
+
+@keyframes glide-in-right {
+  from { opacity: 0; translate: 26% 0; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes title-up {
+  from { opacity: 0; translate: 0 .38em; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes draw-rule {
+  from { scale: 0 1; }
+  to   { scale: 1 1; }
+}
+
+@keyframes pop-suit {
+  from { opacity: 0; scale: .4; }
+  70%  { scale: 1.12; }
+  to   { opacity: 1; scale: 1; }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; translate: -1.4em 0; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes accent-in {
+  from { opacity: 0; translate: 0 .28em; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+/* the rule draws from its left edge */
+.rule { transform-origin: left center; }
+
+/* the red emphasis has to be a box before it can be moved */
+.deal__text em { display: inline-block; }
+
+/* per-row stagger, so the timings below stay readable */
+.deal__row                { --d: 0s; }
+.deal__row:nth-child(2)   { --d: .18s; }
+.deal__row:nth-child(3)   { --d: .36s; }
+.deal__row:nth-child(4)   { --d: .54s; }
+
+.panel--cream.is-revealed .deco-spade {
+  animation: glide-in-right 1.1s cubic-bezier(.2, .8, .22, 1) backwards;
+}
+.panel--cream.is-revealed .deal-title {
+  animation: title-up .6s ease-out .1s backwards;
+}
+.panel--cream.is-revealed .rule {
+  animation: draw-rule .55s cubic-bezier(.65, 0, .35, 1) .45s backwards;
+}
+
+/* icon pops, its line slides in behind it, the red detail lands last */
+.panel--cream.is-revealed .deal__suit {
+  animation: pop-suit .45s cubic-bezier(.2, .9, .3, 1.2) calc(.75s + var(--d)) backwards;
+}
+.panel--cream.is-revealed .deal__text {
+  animation: slide-in-left .5s cubic-bezier(.2, .8, .22, 1) calc(.83s + var(--d)) backwards;
+}
+.panel--cream.is-revealed .deal__text em {
+  animation: accent-in .45s ease-out calc(1.05s + var(--d)) backwards;
+}
+
+/* --- hover: the suit tilts and swells a little --- */
+
+.deal__suit {
+  transition: rotate .25s ease, scale .25s ease;
+}
+.deal__row:hover .deal__suit {
+  rotate: 8deg;
+  scale: 1.08;
+}
+
+/* ============================================================
+   PANEL 2 — WIDE-SCREEN (LANDSCAPE) DETAILS
+   1657x944 artboard: centred title and list on the cream field,
+   red edges left and right, a big spade cropped off the right.
+   ============================================================ */
+
+@media (min-width: 1100px), (min-width: 700px) and (orientation: landscape) {
+
+  .panel--cream .panel__stage {
+    width: min(100%, calc(100svh * 1657 / 944));
+    height: auto;
+    max-height: none;
+    aspect-ratio: 1657 / 944;
+  }
+
+  .panel--cream .scatter { display: none; }
+
+  /* the cream field bleeds past the letterboxed artboard so the
+     section is edge-to-edge cream at any viewport aspect */
+  .panel--cream .panel__shape {
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100svh;
+    transform: translate(-50%, -50%);
+  }
+
+  .panel--cream .panel__inner { padding: 5.5cqw 0 0; }
+
+  .panel--cream .deal-title {
+    font-size: 13cqw;
+    line-height: .95;
+  }
+
+  .panel--cream .rule {
+    width: 44cqw;
+    margin-top: 2.6cqw;
+    border-top-width: .22cqw;
+  }
+
+  /* the list is one centred block, suits left-aligned within it */
+  .panel--cream .deal {
+    width: max-content;
+    margin: 3.4cqw auto 0;
+    padding: 0;
+  }
+
+  .panel--cream .deal__row {
+    gap: 2.4cqw;
+    margin-bottom: 1cqw;
+  }
+  .panel--cream .deal__row:nth-child(2) { margin-bottom: 2cqw; }
+  .panel--cream .deal__row:nth-child(3) { margin-bottom: 3.3cqw; }
+  .panel--cream .deal__row:last-child   { margin-bottom: 0; }
+
+  .panel--cream .deal__suit                       { width: 3.6cqw; }
+  .panel--cream .deal__row:nth-child(2) .deal__suit { width: 3.7cqw; }
+  .panel--cream .deal__row:nth-child(3) .deal__suit { width: 3.6cqw; }
+  .panel--cream .deal__row:nth-child(4) .deal__suit { width: 3.7cqw; }
+
+  .panel--cream .deal__text { font-size: 2.9cqw; }
+
+  /* --- the big spade, cropped by the right edge --- */
+
+  .deco-spade {
+    display: block;
+    position: absolute;
+    top: 9.4cqw;
+    right: -20.5cqw;
+    width: 41cqw;
+    z-index: 0;
+  }
+
+  /* --- chips --- */
+
+  .p2-chip-f,
+  .p2-chip-g,
+  .p2-chip-h { display: block; }
+
+  .panel--cream .p2-chip-a { background: var(--red);   top: -1.8cqw; left: 71.5cqw; width:  8.75cqw; }
+  .panel--cream .p2-chip-b { background: var(--black); top:  1.8cqw; left: 81.2cqw; width:  7.5cqw; }
+  .panel--cream .p2-chip-c { background: var(--black); top: 16.6cqw; left:  4.2cqw; width:  3.3cqw; }
+  .panel--cream .p2-chip-d { background: var(--red);   top: 20.2cqw; left:  8.4cqw; width:  2.7cqw; }
+  .panel--cream .p2-chip-e { background: var(--red);   top: 39.2cqw; left:  3.3cqw; width: 10.9cqw; }
+  .panel--cream .p2-chip-f { background: var(--black); top: 46.2cqw; left: 11.8cqw; width: 11.8cqw; }
+  .panel--cream .p2-chip-g { background: var(--red);   top: 47.4cqw; left: 80.9cqw; width:  3.6cqw; }
+  .panel--cream .p2-chip-h { background: var(--black); top: 51.6cqw; left: 85.7cqw; width:  3.3cqw; }
+}
+
+/* ============================================================
+   PANEL 3 — REVEAL AND FORM INTERACTION
+   Entrance is scroll-triggered like panel 2; the rest responds
+   to what the guest actually does.
+   ============================================================ */
+
+html.js .panel--black:not(.is-revealed) .rsvp-title,
+html.js .panel--black:not(.is-revealed) .form,
+html.js .panel--black:not(.is-revealed) .field,
+html.js .panel--black:not(.is-revealed) .choices,
+html.js .panel--black:not(.is-revealed) .submit,
+html.js .panel--black:not(.is-revealed) .footnote { opacity: 0; }
+
+@keyframes rsvp-title-up {
+  from { opacity: 0; translate: 0 .4em; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+/* the card is dealt down onto the table and straightens as it lands */
+@keyframes deal-form-down {
+  from { opacity: 0; translate: 0 -9%; rotate: -4deg; }
+  60%  {              rotate: 1.2deg; }
+  to   { opacity: 1; translate: 0 0;  rotate: 0deg; }
+}
+
+@keyframes form-part-in {
+  from { opacity: 0; translate: 0 .55em; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.panel--black.is-revealed .rsvp-title { animation: rsvp-title-up .6s ease-out backwards; }
+.panel--black.is-revealed .form       { animation: deal-form-down .75s cubic-bezier(.2, .8, .22, 1) .15s backwards; }
+
+.panel--black.is-revealed .field:nth-of-type(1) { animation: form-part-in .5s ease-out .55s backwards; }
+.panel--black.is-revealed .field:nth-of-type(2) { animation: form-part-in .5s ease-out .68s backwards; }
+.panel--black.is-revealed .field:nth-of-type(3) { animation: form-part-in .5s ease-out .81s backwards; }
+.panel--black.is-revealed .choices              { animation: form-part-in .5s ease-out .95s backwards; }
+.panel--black.is-revealed .submit               { animation: form-part-in .5s ease-out 1.08s backwards; }
+
+/* the deadline lands last */
+.panel--black.is-revealed .footnote { animation: form-part-in .6s ease-out 1.3s backwards; }
+
+/* --- I'M ALL IN: the chips bounce as the stack settles --- */
+
+@keyframes chip-stack {
+  0%   { translate: 0 0;     scale: 1; }
+  28%  { translate: 0 -22%;  scale: 1.06; }
+  56%  { translate: 0 7%;    scale: .98; }
+  78%  { translate: 0 -4%;   scale: 1.01; }
+  100% { translate: 0 0;     scale: 1; }
+}
+
+@keyframes chip-drop {
+  from { translate: 0 -60%; opacity: .25; }
+  62%  { translate: 0 9%; }
+  to   { translate: 0 0;    opacity: 1; }
+}
+
+.choice[data-value="all-in"].is-bumped .choice__icon {
+  animation: chip-stack .5s cubic-bezier(.3, .9, .4, 1.2);
+}
+
+/* each chip lands a beat after the one below it */
+.choice[data-value="all-in"].is-bumped .choice__icon ellipse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: chip-drop .38s cubic-bezier(.3, .9, .4, 1.15) backwards;
+}
+.choice[data-value="all-in"].is-bumped .choice__icon ellipse:nth-child(1) { animation-delay: 0s; }
+.choice[data-value="all-in"].is-bumped .choice__icon ellipse:nth-child(2) { animation-delay: .05s; }
+.choice[data-value="all-in"].is-bumped .choice__icon ellipse:nth-child(3) { animation-delay: .10s; }
+.choice[data-value="all-in"].is-bumped .choice__icon ellipse:nth-child(4) { animation-delay: .08s; }
+.choice[data-value="all-in"].is-bumped .choice__icon ellipse:nth-child(5) { animation-delay: .13s; }
+.choice[data-value="all-in"].is-bumped .choice__icon ellipse:nth-child(6) { animation-delay: .18s; }
+
+/* --- I'LL FOLD: the cards get tossed aside --- */
+
+@keyframes cards-toss {
+  0%   { translate: 0 0;   rotate: 0deg; }
+  45%  { translate: 26% 0; rotate: 7deg; }
+  100% { translate: 0 0;   rotate: 0deg; }
+}
+
+.choice[data-value="fold"].is-bumped .choice__icon {
+  animation: cards-toss .55s ease-in-out;
+}
+
+/* --- COUNT ME IN: press, sweep, celebrate --- */
+
+@keyframes submit-press {
+  0%   { transform: translateY(0); }
+  22%  { transform: translateY(.45cqw); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes submit-sweep {
+  from { translate: -110% 0; }
+  to   { translate:  110% 0; }
+}
+
+@keyframes form-celebrate {
+  0%   { scale: 1; }
+  32%  { scale: 1.028; }
+  62%  { scale: .994; }
+  100% { scale: 1; }
+}
+
+.submit::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  translate: -110% 0;
+  background: linear-gradient(100deg,
+    transparent 0%,
+    rgba(255, 255, 255, .5) 45%,
+    transparent 90%);
+  pointer-events: none;
+}
+
+/* specificity here has to clear the .panel--black.is-revealed
+   entrance rules above, hence the extra ancestor */
+.panel--black .submit.is-sent          { animation: submit-press .55s ease-out; }
+.panel--black .submit.is-sent::after   { animation: submit-sweep .7s ease-out; }
+.panel--black .form.is-celebrating     { animation: form-celebrate .55s ease-out; }
+
+/* ============================================================
+   PANEL 3 — WIDE-SCREEN (LANDSCAPE) RSVP
+   1657x944 artboard: title, ticket-cut form card and footnote
+   centred on the black field, diamonds and chips at the corners.
+   ============================================================ */
+
+@media (min-width: 1100px), (min-width: 700px) and (orientation: landscape) {
+
+  .panel--black .panel__stage {
+    width: min(100%, calc(100svh * 1657 / 944));
+    height: auto;
+    max-height: none;
+    aspect-ratio: 1657 / 944;
+  }
+
+  .panel--black .scatter { display: none; }
+
+  .panel--black .rsvp-title {
+    top: 7.1cqw;
+    left: 0;
+    right: 0;
+    font-size: 5.1cqw;
+    text-align: center;
+    transform: none;
+  }
+
+  /* --- the form card --- */
+
+  .panel--black .form {
+    top: 14.4cqw;
+    left: 31.9cqw;
+    right: 31.9cqw;
+    padding: 3.6cqw 2.4cqw 1.4cqw;
+    clip-path: polygon(
+      0 1.7cqw, 1.7cqw 0,
+      calc(100% - 1.7cqw) 0, 100% 1.7cqw,
+      100% calc(100% - 1.7cqw), calc(100% - 1.7cqw) 100%,
+      1.7cqw 100%, 0 calc(100% - 1.7cqw)
+    );
+  }
+
+  .panel--black .field { gap: 1.4cqw; margin-bottom: 1cqw; }
+  .panel--black .field__label { font-size: 1.8cqw; }
+  .panel--black .field__input {
+    font-size: 1.8cqw;
+    padding-bottom: .4cqw;
+    border-bottom-width: .17cqw;
+  }
+
+  .panel--black .choices { gap: 1.5cqw; margin: 1cqw 0 1.7cqw; }
+  .panel--black .choice {
+    gap: .9cqw;
+    padding: 1.15cqw .5cqw;
+    font-size: 1.7cqw;
+    border-width: .17cqw;
+    border-radius: .5cqw;
+  }
+  .panel--black .choice__icon { width: 3.1cqw; }
+
+  .panel--black .submit {
+    padding: 1.55cqw .5cqw;
+    font-size: 2.5cqw;
+    border-width: .17cqw;
+    border-radius: .5cqw;
+    box-shadow: inset 0 0 0 .25cqw var(--cream);
+  }
+
+  .panel--black .form__note {
+    top: 46.2cqw;
+    left: 12cqw;
+    right: 12cqw;
+    font-size: 1.8cqw;
+  }
+
+  .panel--black .footnote {
+    top: 46.2cqw;
+    font-size: 1.8cqw;
+  }
+
+  /* --- diamonds and chips --- */
+
+  .deco-diamond--alt-a,
+  .deco-diamond--alt-b,
+  .p3-chip-d,
+  .p3-chip-e,
+  .p3-chip-f { display: block; }
+
+  .panel--black .deco-diamond--top   { top:  1.5cqw; right: auto; left: 89.7cqw; width: 2.7cqw; }
+  .panel--black .deco-diamond--alt-a { top:  7.2cqw;              left:  3.6cqw; width: 3.3cqw; }
+  .panel--black .deco-diamond--bottom{ top: 43.2cqw;              left:  3.7cqw; width: 3.2cqw; }
+  .panel--black .deco-diamond--alt-b { top: 43.2cqw;              left: 91.4cqw; width: 3.3cqw; }
+
+  .panel--black .p3-chip-a { top:  3.6cqw; right: auto; left: 93.5cqw; width: 3.3cqw; }
+  .panel--black .p3-chip-b { top:  7.5cqw; right: auto; left: 92.8cqw; width: 2.9cqw; }
+  .panel--black .p3-chip-c { top: 11.5cqw;              left:  9.2cqw; width: 3.5cqw; }
+  .panel--black .p3-chip-d { top: 17.5cqw;              left: 88.4cqw; width: 2.8cqw; }
+  .panel--black .p3-chip-e { top: 48cqw;                left:  8.3cqw; width: 3.1cqw; }
+  .panel--black .p3-chip-f { top: 47.7cqw;              left: 85.4cqw; width: 3.3cqw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; scroll-snap-type: none; }
+  * { transition: none !important; }
+
+  /* no deal, no bob — everything simply starts at rest */
+  .card--ace,
+  .card--king,
+  .title__line--dark,
+  .title__line--light,
+  .eyebrow,
+  .tagline,
+  .scroll-cue,
+  .deco-spade,
+  .deal-title,
+  .rule,
+  .deal__suit,
+  .deal__text,
+  .deal__text em,
+  .rsvp-title,
+  .form,
+  .field,
+  .choices,
+  .submit,
+  .submit::after,
+  .footnote,
+  .choice__icon,
+  .choice__icon ellipse { animation: none !important; opacity: 1 !important; translate: none; rotate: none; scale: none; }
+}

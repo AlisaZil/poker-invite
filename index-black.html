@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Poker Night — You're Invited</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="styles-black.css" />
+</head>
+<body>
+
+<main class="spread">
+
+  <!-- ============ PANEL 1 — RED ============ -->
+  <section class="panel panel--red" id="panel-1">
+    <div class="scatter" aria-hidden="true">
+      <span class="chip chip--black" style="--x: 8vw;  --y: 14vh; --s: 5.2vh;"></span>
+      <span class="chip chip--cream" style="--x: 12vw; --y: 20vh; --s: 4.4vh;"></span>
+      <span class="chip chip--black" style="--x: 84vw; --y: 62vh; --s: 5vh;"></span>
+      <span class="chip chip--cream" style="--x: 88vw; --y: 68vh; --s: 4.2vh;"></span>
+      <span class="chip chip--cream" style="--x: 16vw; --y: 78vh; --s: 3.6vh;"></span>
+      <span class="chip chip--black" style="--x: 79vw; --y: 16vh; --s: 3.4vh;"></span>
+    </div>
+    <div class="panel__stage">
+      <span class="chip chip--black p1-chip-a"></span>
+      <span class="chip chip--cream p1-chip-b"></span>
+      <span class="chip chip--black p1-chip-c"></span>
+      <span class="chip chip--cream p1-chip-d"></span>
+      <span class="chip chip--black p1-chip-e"></span>
+      <span class="chip chip--cream p1-chip-f"></span>
+      <span class="chip chip--black p1-chip-g"></span>
+      <span class="chip chip--cream p1-chip-h"></span>
+      <span class="chip chip--black p1-chip-i"></span>
+
+      <p class="eyebrow">You're invited to</p>
+
+      <div class="cards">
+        <div class="card card--ace">
+          <span class="card__corner">
+            <span class="card__rank">A</span>
+            <img class="card__mini" src="assets/spade-solid.png" alt="" />
+          </span>
+          <img class="card__pip" src="assets/spade-solid.png" alt="Ace of spades" />
+        </div>
+        <div class="card card--king">
+          <span class="card__corner">
+            <span class="card__rank card__rank--red">K</span>
+            <img class="card__mini" src="assets/diamond-solid.png" alt="" />
+          </span>
+          <img class="card__pip" src="assets/diamond-solid.png" alt="King of diamonds" />
+          <span class="card__corner card__corner--flip">
+            <span class="card__rank card__rank--red">K</span>
+            <img class="card__mini" src="assets/diamond-solid.png" alt="" />
+          </span>
+        </div>
+      </div>
+
+      <h1 class="title">
+        <span class="title__line title__line--dark">Poker</span>
+        <span class="title__line title__line--light">Night</span>
+      </h1>
+
+      <p class="tagline">Cards <i>&bull;</i> Cocktails <i>&bull;</i> Questionable Decisions</p>
+
+      <button class="scroll-cue" type="button" aria-label="Scroll to the details">
+        <svg viewBox="0 0 40 18" aria-hidden="true"><path d="M2 2 L20 15 L38 2" /></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ PANEL 2 — CREAM ============ -->
+  <section class="panel panel--cream" id="panel-2">
+    <div class="scatter" aria-hidden="true">
+      <span class="chip chip--black" style="--x: 6vw;  --y: 26vh; --s: 4.6vh;"></span>
+      <span class="chip chip--red"   style="--x: 10vw; --y: 32vh; --s: 3.8vh;"></span>
+      <span class="chip chip--red"   style="--x: 87vw; --y: 70vh; --s: 4.6vh;"></span>
+      <span class="chip chip--black" style="--x: 91vw; --y: 76vh; --s: 3.8vh;"></span>
+    </div>
+    <div class="panel__stage">
+      <svg class="panel__shape" viewBox="0 0 457 1040" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M23,0 C41,170 45,300 31,480 C17,660 11,830 17,1040 L440,1040 C446,830 452,700 436,520 C420,340 423,170 437,0 Z" />
+      </svg>
+
+      <div class="panel__inner">
+        <img class="deco-spade" src="assets/spade-solid.png" alt="" />
+
+        <span class="chip chip--black p2-chip-a"></span>
+        <span class="chip chip--cream p2-chip-b"></span>
+        <span class="chip chip--red p2-chip-c"></span>
+        <span class="chip chip--black p2-chip-d"></span>
+        <span class="chip chip--cream p2-chip-e"></span>
+        <span class="chip chip--red p2-chip-f"></span>
+        <span class="chip chip--red p2-chip-g"></span>
+        <span class="chip chip--black p2-chip-h"></span>
+
+        <h2 class="deal-title">The <span>Deal</span></h2>
+        <hr class="rule" />
+
+        <ul class="deal">
+          <li class="deal__row">
+            <img class="deal__suit" src="assets/spade-solid.png" alt="" />
+            <p class="deal__text">Saturday <i>&bull;</i> 8:00 PM<br /><em>14 September</em></p>
+          </li>
+          <li class="deal__row">
+            <img class="deal__suit" src="assets/diamond-solid.png" alt="" />
+            <p class="deal__text">The Back Room<br /><em>27 King Street</em></p>
+          </li>
+          <li class="deal__row">
+            <img class="deal__suit" src="assets/club-solid.png" alt="" />
+            <p class="deal__text">Dress code: <em>Sharp</em></p>
+          </li>
+          <li class="deal__row">
+            <img class="deal__suit" src="assets/heart-solid.png" alt="" />
+            <p class="deal__text">Buy-in: <em>$25</em></p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PANEL 3 — BLACK ============ -->
+  <section class="panel panel--black" id="panel-3">
+    <div class="scatter" aria-hidden="true">
+      <img class="scatter__diamond" src="assets/diamond-solid.png" alt="" style="--x: 9vw;  --y: 20vh; --s: 7vh;" />
+      <span class="chip chip--cream" style="--x: 14vw; --y: 28vh; --s: 4vh;"></span>
+      <span class="chip chip--red"   style="--x: 85vw; --y: 30vh; --s: 4.4vh;"></span>
+      <img class="scatter__diamond" src="assets/diamond-solid.png" alt="" style="--x: 88vw; --y: 72vh; --s: 6.4vh;" />
+      <span class="chip chip--cream" style="--x: 83vw; --y: 79vh; --s: 3.6vh;"></span>
+    </div>
+    <div class="panel__stage">
+      <img class="deco-diamond deco-diamond--top" src="assets/diamond-solid.png" alt="" />
+      <span class="chip chip--cream p3-chip-a"></span>
+      <span class="chip chip--red p3-chip-b"></span>
+      <img class="deco-diamond deco-diamond--bottom" src="assets/diamond-solid.png" alt="" />
+      <span class="chip chip--cream p3-chip-c"></span>
+      <img class="deco-diamond deco-diamond--alt-a" src="assets/diamond-solid.png" alt="" />
+      <img class="deco-diamond deco-diamond--alt-b" src="assets/diamond-solid.png" alt="" />
+      <span class="chip chip--red p3-chip-d"></span>
+      <span class="chip chip--cream p3-chip-e"></span>
+      <span class="chip chip--cream p3-chip-f"></span>
+
+      <h2 class="rsvp-title"><span>Save</span> your seat</h2>
+
+      <form class="form" id="rsvp-form" novalidate>
+        <label class="field">
+          <span class="field__label">Name</span>
+          <input class="field__input" type="text" name="name" autocomplete="name" required />
+        </label>
+        <label class="field">
+          <span class="field__label">Email</span>
+          <input class="field__input" type="email" name="email" autocomplete="email" required />
+        </label>
+        <label class="field">
+          <span class="field__label">Number of players</span>
+          <input class="field__input" type="number" name="players" min="1" max="10" step="1" value="" />
+        </label>
+
+        <div class="choices" role="radiogroup" aria-label="Are you in?">
+          <button class="choice" type="button" role="radio" aria-checked="false" data-value="all-in">
+            <svg class="choice__icon" viewBox="0 0 34 26" aria-hidden="true">
+              <ellipse class="s-c" cx="12" cy="19.5" rx="9.5" ry="4.2" />
+              <ellipse class="s-r" cx="12" cy="16.5" rx="9.5" ry="4.2" />
+              <ellipse class="s-c" cx="12" cy="13.5" rx="9.5" ry="4.2" />
+              <ellipse class="s-r" cx="23" cy="12" rx="8.5" ry="3.8" />
+              <ellipse class="s-c" cx="23" cy="9" rx="8.5" ry="3.8" />
+              <ellipse class="s-r" cx="23" cy="6" rx="8.5" ry="3.8" />
+            </svg>
+            <span>I'm all in</span>
+          </button>
+          <button class="choice" type="button" role="radio" aria-checked="false" data-value="fold">
+            <svg class="choice__icon" viewBox="0 0 38 26" aria-hidden="true">
+              <rect class="f-r" x="1.5" y="4" width="14" height="19" rx="2.5" transform="rotate(-9 8.5 13.5)" />
+              <rect class="f-r" x="11" y="4" width="14" height="19" rx="2.5" transform="rotate(6 18 13.5)" />
+              <path class="f-a" d="M27 14 h7 M31 11 l3.4 3 -3.4 3" />
+            </svg>
+            <span>I'll fold</span>
+          </button>
+        </div>
+
+        <button class="submit" type="submit">Count me in</button>
+      </form>
+
+      <p class="form__note" id="form-note" role="status" aria-live="polite"></p>
+
+      <p class="footnote">No bluffing.<br />RSVP by September 7.</p>
+    </div>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

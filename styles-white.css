@@ -1,0 +1,53 @@
+/* ============================================================
+   POKER NIGHT — WHITE EDITION
+   A colour-only theme layered on top of styles.css. Every rule
+   here overrides a colour; not one line touches layout, so all
+   three editions stay in step.
+
+   Load order matters:
+     <link href="styles.css">        layout + type
+     <link href="styles-white.css">  this file
+
+   White becomes the dominant ground: the hero turns white, the
+   paper the ribbon and cards are printed on turns white, and the
+   RSVP card turns white on its black field. Red and black stay
+   on as the accents they always were.
+   ============================================================ */
+
+:root {
+  --cream:      #ffffff;   /* the paper, everywhere it appears */
+  --cream-pure: #ffffff;   /* card faces                       */
+  --page:       #ededea;   /* the ground behind the sections   */
+}
+
+/* ============================================================
+   PANEL 1 — the hero, now white
+   ============================================================ */
+
+.panel--red { background: var(--cream); }
+
+/* the grain reads as a light tint rather than a dark one */
+.panel--red::after { opacity: .10; }
+
+/* type that used to sit on red now sits on white */
+.eyebrow            { color: var(--black); }
+.title__line--dark  { color: var(--black); }
+.title__line--light { color: var(--red); }
+.tagline            { color: var(--black); }
+.scroll-cue path    { stroke: var(--black); }
+
+/* A white card on a white ground has no silhouette, so it is
+   given a hairline. The width is in cqw, so it scales with the
+   artboard at every breakpoint. */
+.panel--red .card { border: .3cqw solid var(--black); }
+
+/* ============================================================
+   CHIPS
+   Cream chips are invisible on white, so on the white grounds
+   each pair becomes black + red instead.
+   ============================================================ */
+
+.panel--red   .chip--cream { background: var(--red); }
+.panel--cream .chip--cream { background: var(--red); }
+
+/* Panel 3 keeps its black field, so its chips stay white. */
