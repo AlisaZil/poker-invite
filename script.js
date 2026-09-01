@@ -149,6 +149,50 @@
     resetButton();
   });
 
+  /* ---------- theme switcher ---------- */
+
+  var themeSheets  = document.querySelectorAll("link[data-theme]");
+  var themeButtons = Array.prototype.slice.call(
+    document.querySelectorAll(".theme-switch__swatch")
+  );
+
+  function applyTheme(name) {
+    /* Both theme sheets are already in the document; switching is
+       just a matter of which one is enabled, so it is instant. */
+    themeSheets.forEach(function (link) {
+      link.disabled = link.dataset.theme !== name;
+    });
+
+    themeButtons.forEach(function (btn) {
+      var on = btn.dataset.theme === name;
+      btn.classList.toggle("is-active", on);
+      btn.setAttribute("aria-checked", String(on));
+    });
+
+    document.documentElement.dataset.theme = name;
+    try { localStorage.setItem("poker-theme", name); } catch (e) {}
+  }
+
+  themeButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      applyTheme(btn.dataset.theme);
+    });
+
+    /* arrow keys walk the group, as a radiogroup should */
+    btn.addEventListener("keydown", function (e) {
+      if (["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp"].indexOf(e.key) === -1) return;
+      e.preventDefault();
+      var i    = themeButtons.indexOf(btn);
+      var step = (e.key === "ArrowRight" || e.key === "ArrowDown") ? 1 : -1;
+      var next = themeButtons[(i + step + themeButtons.length) % themeButtons.length];
+      applyTheme(next.dataset.theme);
+      next.focus();
+    });
+  });
+
+  /* match the buttons to whatever the pre-paint script chose */
+  applyTheme(document.documentElement.dataset.theme || "red");
+
   /* ---------- reveal the details when they scroll into view ---------- */
 
   var revealing = [

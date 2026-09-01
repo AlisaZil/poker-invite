@@ -8,8 +8,28 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="styles-black.css" data-theme="black" disabled />
+<link rel="stylesheet" href="styles-white.css" data-theme="white" disabled />
+<script>
+/* Applied before first paint so a remembered theme never flashes red. */
+(function () {
+  var saved;
+  try { saved = localStorage.getItem("poker-theme"); } catch (e) {}
+  var theme = saved || "red";
+  document.querySelectorAll("link[data-theme]").forEach(function (link) {
+    link.disabled = link.dataset.theme !== theme;
+  });
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
 </head>
 <body>
+
+<div class="theme-switch" role="radiogroup" aria-label="Colour theme">
+  <button class="theme-switch__swatch theme-switch__swatch--red"   type="button" role="radio" aria-checked="true"  data-theme="red"   aria-label="Red theme"></button>
+  <button class="theme-switch__swatch theme-switch__swatch--black" type="button" role="radio" aria-checked="false" data-theme="black" aria-label="Black theme"></button>
+  <button class="theme-switch__swatch theme-switch__swatch--white" type="button" role="radio" aria-checked="false" data-theme="white" aria-label="White theme"></button>
+</div>
 
 <main class="spread">
 

@@ -20,6 +20,15 @@
 
 * { box-sizing: border-box; }
 
+/* One screenful. svh is the height with the mobile browser's UI
+   showing; dvh tracks the viewport as that UI retracts, so a
+   section keeps filling the screen instead of letting the next
+   one peek in at the bottom. svh stays as the fallback. */
+:root { --vph: 100svh; }
+@supports (height: 100dvh) {
+  :root { --vph: 100dvh; }
+}
+
 html { -webkit-text-size-adjust: 100%; }
 
 html {
@@ -37,6 +46,50 @@ body {
 
 img { max-width: 100%; display: block; }
 
+/* ---------- theme switcher ---------- */
+
+/* Deliberately uses literal colours rather than tokens: the control
+   has to stay legible on every theme, so no theme sheet touches it. */
+.theme-switch {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 100;
+  display: flex;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(20, 16, 14, .5);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.theme-switch__swatch {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .5);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.theme-switch__swatch:hover      { transform: scale(1.14); }
+/* a dark gap before the white ring, so the ring stays readable
+   even on the white swatch */
+.theme-switch__swatch.is-active {
+  box-shadow: 0 0 0 2px rgba(20, 16, 14, .9), 0 0 0 4px #fff;
+}
+.theme-switch__swatch:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.theme-switch__swatch--red   { background: #d8232a; }
+.theme-switch__swatch--black { background: #17110f; }
+.theme-switch__swatch--white { background: #ffffff; }
+
 /* ---------- layout — one continuous scrolling page ---------- */
 
 .spread {
@@ -47,7 +100,7 @@ img { max-width: 100%; display: block; }
 .panel {
   position: relative;
   width: 100%;
-  min-height: 100svh;
+  min-height: var(--vph);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,14 +115,14 @@ img { max-width: 100%; display: block; }
 .panel__stage {
   container-type: inline-size;
   position: relative;
-  height: 100svh;
-  max-height: 100svh;
-  width: min(100%, calc(100svh * 886 / 1772));
+  height: var(--vph);
+  max-height: var(--vph);
+  width: min(100%, calc(var(--vph) * 886 / 1772));
   aspect-ratio: 886 / 1772;
   flex: 0 0 auto;
 }
-.panel--cream .panel__stage { width: min(100%, calc(100svh * 457 / 1043)); aspect-ratio: 457 / 1043; }
-.panel--black .panel__stage { width: min(100%, calc(100svh * 471 / 1043)); aspect-ratio: 471 / 1043; }
+.panel--cream .panel__stage { width: min(100%, calc(var(--vph) * 457 / 1043)); aspect-ratio: 457 / 1043; }
+.panel--black .panel__stage { width: min(100%, calc(var(--vph) * 471 / 1043)); aspect-ratio: 471 / 1043; }
 
 /* paper grain over every panel */
 .panel::after {
@@ -647,7 +700,7 @@ img { max-width: 100%; display: block; }
 @media (min-width: 700px) and (max-width: 1099px) and (orientation: landscape) {
 
   .panel--red .panel__stage {
-    width: min(100%, calc(100svh * 4 / 3));
+    width: min(100%, calc(var(--vph) * 4 / 3));
     height: auto;
     max-height: none;
     aspect-ratio: 4 / 3;
@@ -747,7 +800,7 @@ img { max-width: 100%; display: block; }
 @media (min-width: 1100px) {
 
   .panel--red .panel__stage {
-    width: min(100%, calc(100svh * 1656 / 944));
+    width: min(100%, calc(var(--vph) * 1656 / 944));
     height: auto;
     max-height: none;
     aspect-ratio: 1656 / 944;
@@ -937,7 +990,7 @@ html.js .panel--cream:not(.is-revealed) .deal__text em { opacity: 0; }
 @media (min-width: 1100px), (min-width: 700px) and (orientation: landscape) {
 
   .panel--cream .panel__stage {
-    width: min(100%, calc(100svh * 1657 / 944));
+    width: min(100%, calc(var(--vph) * 1657 / 944));
     height: auto;
     max-height: none;
     aspect-ratio: 1657 / 944;
@@ -951,7 +1004,7 @@ html.js .panel--cream:not(.is-revealed) .deal__text em { opacity: 0; }
     top: 50%;
     left: 50%;
     width: 100vw;
-    height: 100svh;
+    height: var(--vph);
     transform: translate(-50%, -50%);
   }
 
@@ -1151,7 +1204,7 @@ html.js .panel--black:not(.is-revealed) .footnote { opacity: 0; }
 @media (min-width: 1100px), (min-width: 700px) and (orientation: landscape) {
 
   .panel--black .panel__stage {
-    width: min(100%, calc(100svh * 1657 / 944));
+    width: min(100%, calc(var(--vph) * 1657 / 944));
     height: auto;
     max-height: none;
     aspect-ratio: 1657 / 944;
