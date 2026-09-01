@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#d8232a" />
 <title>Poker Night — You're Invited</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,6 +21,10 @@
     link.disabled = link.dataset.theme !== theme;
   });
   document.documentElement.dataset.theme = theme;
+
+  var tint = { red: "#d8232a", black: "#17110f", white: "#ffffff" }[theme];
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta && tint) meta.content = tint;
 })();
 </script>
 </head>

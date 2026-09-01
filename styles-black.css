@@ -16,6 +16,8 @@
    ============================================================ */
 
 :root {
+  --page:     #17110f;   /* ground behind the status bar too      */
+
   /* the accent tokens keep their names, but no longer carry red */
   --red:      #4f4842;   /* accent shapes: chips, marks           */
   --red-ink:  #d61f26;   /* accent type — red, as in the original */

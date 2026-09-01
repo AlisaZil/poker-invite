@@ -156,6 +156,9 @@
     document.querySelectorAll(".theme-switch__swatch")
   );
 
+  /* keeps the phone's status/URL bar tinted to match the page */
+  var THEME_TINT = { red: "#d8232a", black: "#17110f", white: "#ffffff" };
+
   function applyTheme(name) {
     /* Both theme sheets are already in the document; switching is
        just a matter of which one is enabled, so it is instant. */
@@ -170,6 +173,10 @@
     });
 
     document.documentElement.dataset.theme = name;
+
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta && THEME_TINT[name]) meta.content = THEME_TINT[name];
+
     try { localStorage.setItem("poker-theme", name); } catch (e) {}
   }
 

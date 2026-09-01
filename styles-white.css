@@ -17,7 +17,7 @@
 :root {
   --cream:      #ffffff;   /* the paper, everywhere it appears */
   --cream-pure: #ffffff;   /* card faces                       */
-  --page:       #ededea;   /* the ground behind the sections   */
+  --page:       #ffffff;   /* ground behind the status bar too */
 }
 
 /* ============================================================

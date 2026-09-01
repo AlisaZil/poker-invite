@@ -14,7 +14,7 @@
   --cream-pure: #f7f2e8;
   --black:      #17110f;
   --ink:        #171717;
-  --page:       #f0eae0;
+  --page:       #d8232a;   /* also the ground behind the status bar */
   --grain:      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
 }
 
@@ -100,7 +100,7 @@ img { max-width: 100%; display: block; }
 .panel {
   position: relative;
   width: 100%;
-  min-height: var(--vph);
+  height: var(--vph);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -628,15 +628,10 @@ img { max-width: 100%; display: block; }
 
 /* Short / wide viewports: let the artboard be led by width instead,
    so the poster never has to shrink below a readable size. */
-@media (max-aspect-ratio: 886/1772) {
-  .panel--red .panel__stage { width: 100%; height: auto; max-height: none; }
-}
-@media (max-aspect-ratio: 457/1043) {
-  .panel--cream .panel__stage { width: 100%; height: auto; max-height: none; }
-}
-@media (max-aspect-ratio: 471/1043) {
-  .panel--black .panel__stage { width: 100%; height: auto; max-height: none; }
-}
+/* No width-led fallback: the artboard is always sized from the
+   viewport height, so a section can never exceed one screenful.
+   On a very tall phone this leaves a thin band of the field
+   colour down each side, which is the field bleeding anyway. */
 
 /* ============================================================
    PANEL 1 — LOAD CHOREOGRAPHY
